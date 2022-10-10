@@ -14,11 +14,11 @@ glue = boto3.client('glue', region_name='us-east-2',
 
 from airflow.utils.dates import days_ago
 
-def trigger_crawler_inscricao_func():
-        glue.start_crawler(Name='') ### COLOCAR NOME DO CRAWLER
+def trigger_crawler_join():
+        glue.start_crawler(Name='data_olist') ### COLOCAR NOME DO CRAWLER
 
-def trigger_crawler_final_func():
-        glue.start_crawler(Name='') ### COLOCAR NOME DO CRAWLER
+""" def trigger_crawler_final_func():
+        glue.start_crawler(Name='') ### COLOCAR NOME DO CRAWLER """
 
 
 
@@ -67,11 +67,6 @@ with DAG(
         kubernetes_conn_id="kubernetes_default",
     )
 
-    trigger_crawler_inscricao = PythonOperator(
-        task_id='trigger_crawler_', ### prenncher crawler
-        python_callable=trigger_crawler_?_func,
-    )
-
     olist_join = SparkKubernetesOperator(
         task_id='olist_join',
         namespace="airflow",
@@ -103,24 +98,12 @@ with DAG(
     )
 
 
-    trigger_crawler_final = PythonOperator(
-        task_id='trigger_crawler_final', ### Editar CRAWLER
-        python_callable=trigger_crawler_final_func,
+    trigger_crawler_join = PythonOperator(
+        task_id='trigger_crawler_join',
+        python_callable=trigger_crawler_join,
     )
 
 converte_parquet >> converte_parquet_monitor >> olist_tratamento_dados >> olist_tratamento_dados_monitor
-trigger_crawler_inscricao
 olist_tratamento_dados_monitor >> olist_join >> olist_join_monitor
-olist_join_monitor >> trigger_crawler_final
+olist_join_monitor >> trigger_crawler_join
 [olist_join_monitor, olist_tratamento_dados_monitor] >> entregadores_vendedores >> entregadores_vendedores_monitor
-
-
-""" converte_parquet >> converte_parquet_monitor >> anonimiza_inscricao >> anonimiza_inscricao_monitor
-anonimiza_inscricao_monitor >> trigger_crawler_inscricao
-converte_parquet_monitor >> agrega_idade >> agrega_idade_monitor
-converte_parquet_monitor >> agrega_sexo >> agrega_sexo_monitor
-converte_parquet_monitor >> agrega_notas >> agrega_notas_monitor
-[agrega_idade_monitor, agrega_sexo_monitor, agrega_notas_monitor] >> join_final >> join_final_monitor
-join_final_monitor >> trigger_crawler_final
-[agrega_idade_monitor, agrega_notas_monitor] >> agrega_sexo
-[agrega_idade_monitor, agrega_notas_monitor] >> anonimiza_inscricao """
