@@ -17,7 +17,7 @@ spec:
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: "docker.io/wcalmeida/spark-operator"
+  image: "docker.io/neylsoncrepalde/spark-operator:v3.0.0-aws"
   imagePullPolicy: Always
   mainApplicationFile: s3://projeto-aplicado-xpe22/pyspark/olist_join.py
   sparkVersion: "3.0.0"
