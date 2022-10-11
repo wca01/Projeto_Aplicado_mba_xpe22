@@ -1,7 +1,7 @@
 apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
-  name: job-spark-trat-dados #-{{ macros.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") }}
+  name: job-spark-trat-dados-{{ macros.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") }}
   namespace: airflow
 spec:
   volumes:
@@ -19,7 +19,7 @@ spec:
   mode: cluster
   image: "docker.io/neylsoncrepalde/spark-operator:v3.0.0-aws"
   imagePullPolicy: Always
-  mainApplicationFile: s3://projeto-aplicado-xpe22/pyspark/olist_tratamento_dados.py
+  mainApplicationFile: s3a://projeto-aplicado-xpe22/pyspark/olist_tratamento_dados.py
   sparkVersion: "3.0.0"
   restartPolicy:
     type: Never
