@@ -1,2 +1,4 @@
 *.csv
 .terraform*
+eksctl.yaml
+cluster_autoscaler.yml
