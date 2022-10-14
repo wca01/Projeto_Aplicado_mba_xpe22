@@ -1,3 +1,20 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: airflow
+  name: spark-role
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["*"]
+---
 # Role for spark-on-k8s-operator to create resources on cluster
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
