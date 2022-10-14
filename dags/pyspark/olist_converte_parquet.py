@@ -21,6 +21,7 @@ if __name__ == "__main__":
     # init spark session
     spark = SparkSession\
             .builder\
+            .config('spark.executor.memory', '8G')\
             .appName("OLIST Job")\
             .getOrCreate()
 

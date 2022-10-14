@@ -51,7 +51,7 @@ spec:
         key: aws_secret_access_key
     cores: 3
     instances: 3
-    memory: "4g"
+    memory: "8g"
     labels:
       version: 3.0.0
     volumeMounts:
