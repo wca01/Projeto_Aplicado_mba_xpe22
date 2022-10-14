@@ -2,3 +2,4 @@
 .terraform*
 eksctl.yaml
 cluster_autoscaler.yml
+generate_fernet_key.py
