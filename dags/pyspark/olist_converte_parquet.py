@@ -2,6 +2,9 @@ from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 from variables import olist_path
 from variables import parquet_path
+import findspark
+findspark.init()
+findspark.find()
 
 # set conf
 conf = (
