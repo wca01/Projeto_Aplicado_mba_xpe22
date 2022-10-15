@@ -1,10 +1,7 @@
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
-from variables import olist_path
-from variables import parquet_path
-import findspark
-findspark.init()
-findspark.find()
+""" from variables import olist_path
+from variables import parquet_path """
 
 # set conf
 conf = (
@@ -30,6 +27,9 @@ if __name__ == "__main__":
 
     spark.sparkContext.setLogLevel("WARN")
     
+    olist_path = "s3a://mba-xpe22-landing-zone/olist/{file}.csv"
+    parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet/"
+
     df_customers = spark.read.format("csv").options(header=True, inferSchema=True, delimiter=';') \
     .load(f"{olist_path}/olist_customers_dataset.csv")
     df_customers.printSchema()
