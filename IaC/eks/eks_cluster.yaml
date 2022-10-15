@@ -3,7 +3,7 @@ kind: ClusterConfig
 metadata:
   name: proj-mbaxpe22-k8s
   region: us-east-2
-  version: "1.22"
+  version: "1.20"
 iam:
   withOIDC: true
   serviceAccounts:
@@ -29,9 +29,9 @@ managedNodeGroups:
   - name: ng-mbaxpe22
     instanceTypes: ["m5.xlarge"]
     spot: true
-    minSize: 3
+    minSize: 2
     maxSize: 6
-    desiredCapacity: 1
+    desiredCapacity: 2
     volumeSize: 20
     availabilityZones: ["us-east-2a"]
     labels:
