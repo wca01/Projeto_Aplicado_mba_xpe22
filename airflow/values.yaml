@@ -239,7 +239,13 @@ executor: "KubernetesExecutor"
 allowPodLaunching: true
 
 # Environment variables for all airflow containers
-env: []
+env: 
+  - name: AIRFLOW__CORE__REMOTE_LOGGING
+    value: 'True'
+  - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
+    value: "s3://projeto-aplicado-xpe22/airflow-logs/"
+  - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
+    value: "my_aws"
 # - name: ""
 #   value: ""
 
