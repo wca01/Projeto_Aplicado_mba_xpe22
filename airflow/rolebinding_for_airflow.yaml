@@ -1,20 +1,3 @@
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: airflow
-  name: spark-role
-rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["*"]
-- apiGroups: [""]
-  resources: ["services"]
-  verbs: ["*"]
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["*"]
----
 # Role for spark-on-k8s-operator to create resources on cluster
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -43,3 +26,30 @@ subjects:
   - kind: ServiceAccount
     name: airflow-worker
     namespace: airflow
+
+###########################
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: airflow
+  name: namespace-reader
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+    verbs: ["get", "list", "watch"]
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: namespace-reader-binding
+  namespace: airflow
+subjects:
+- kind: ServiceAccount
+  name: default
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: namespace-reader
+  apiGroup: ""
