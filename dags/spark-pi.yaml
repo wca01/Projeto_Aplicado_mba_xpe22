@@ -1,7 +1,7 @@
 apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
-  name: pyspark-pi
+  name: pyspark-pi2
   namespace: airflow
 spec:
   type: Python
