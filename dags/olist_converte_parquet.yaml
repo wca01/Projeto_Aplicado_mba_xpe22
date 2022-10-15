@@ -9,7 +9,7 @@ spec:
       emptyDir: {}
   sparkConf:
     extraJavaOptions: -Dcom.amazonaws.services.s3.enableV4=true
-    spark.jars.packages: "org.apache.hadoop:hadoop-aws:jar:3.3.0,com.databricks:spark-avro_2.11:4.0.0"
+    spark.jars.packages: "org.apache.hadoop:hadoop-aws:3.3.0,com.databricks:spark-avro_2.11:4.0.0"
     spark.driver.extraJavaOptions: "-Divy.cache.dir=/tmp -Divy.home=/tmp"
     spark.kubernetes.allocation.batch.size: "10"
   hadoopConf:
