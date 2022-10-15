@@ -29,8 +29,8 @@ managedNodeGroups:
   - name: ng-mbaxpe22
     instanceTypes: ["m5.xlarge"]
     spot: true
-    minSize: 1
-    maxSize: 4
+    minSize: 3
+    maxSize: 6
     desiredCapacity: 1
     volumeSize: 20
     availabilityZones: ["us-east-2a"]
