@@ -1,0 +1,12 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: eks-mba-xpe22-alpha
+  region: us-east-2
+nodeGroups:
+  - name: node-proj-workers
+    instanceType: m5.xlarge
+    desiredCapacity: 4
+    minSize: 1
+    maxSize: 4
