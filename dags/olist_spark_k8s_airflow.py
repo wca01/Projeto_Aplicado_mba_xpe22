@@ -99,7 +99,7 @@ with DAG(
         python_callable=trigger_crawler_join,
     )
 
-converte_parquet >> converte_parquet_monitor >> # olist_tratamento_dados >> olist_tratamento_dados_monitor
+converte_parquet >> converte_parquet_monitor # >> olist_tratamento_dados >> olist_tratamento_dados_monitor
 # olist_tratamento_dados_monitor >> olist_join >> olist_join_monitor
 # olist_join_monitor >> trigger_crawler_join
 # [olist_join_monitor, olist_tratamento_dados_monitor] >> entregadores_vendedores >> entregadores_vendedores_monitor
