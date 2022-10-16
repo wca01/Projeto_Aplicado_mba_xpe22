@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     spark.sparkContext.setLogLevel("WARN")
     
-    olist_path = "s3a://mba-xpe22-landing-zone/olist/{file}.csv"
+    olist_path = "s3a://mba-xpe22-landing-zone/olist/"
     parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet/"
 
     df_customers = spark.read.format("csv").options(header=True, inferSchema=True, delimiter=';') \
