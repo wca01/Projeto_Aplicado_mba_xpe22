@@ -1,0 +1,30 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+ name: 
+ region: 
+ version: "1.18"
+
+availabilityZones: ["a", "b", "c"]
+
+managedNodeGroups:
+- name: ng-on-demand
+  desiredCapacity: 2
+  minSize: 2
+  maxSize: 4
+  labels:
+    lifecycle: OnDemand
+  iam:
+    withAddonPolicies:
+      autoScaler: true
+ 
+- name: ng-spot1
+  desiredCapacity: 2
+  minSize: 1
+  maxSize: 4
+  instanceTypes: ["m5.large","m4.large","m5a.large"]
+  spot: true
+  labels:
+    lifecycle: Ec2Spot

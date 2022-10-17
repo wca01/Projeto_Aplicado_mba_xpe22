@@ -1,7 +1,5 @@
 *.csv
 .terraform*
-eksctl.yaml
-cluster_autoscaler.yml
 generate_fernet_key.py
-eks_create.yaml
 Image_aws
+Iac/eks*
