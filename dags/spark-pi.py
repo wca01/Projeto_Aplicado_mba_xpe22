@@ -10,7 +10,7 @@ from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKube
 from airflow.utils.dates import days_ago
 
 dag = DAG(
-    'spark_pi',
+    'spark_pi2',
     default_args={
         'owner': 'airflow',
         'depends_on_past': False,
