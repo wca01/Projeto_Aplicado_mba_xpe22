@@ -8,32 +8,27 @@ from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 from airflow.utils.dates import days_ago
-# [END import_module]
 
-# [START default_args]
-default_args = {
-    'owner': 'Afonso Rodrigues',
-    'depends_on_past': False,
-    'email': ['afonsoaugustoventura@gmail.com'],
-    'email_on_failure': True,
-    'email_on_retry': False,
-    'retries': 3,
-    'retry_delay': timedelta(minutes=5)}
-# [END default_args]
-
-# [START instantiate_dag]
 dag = DAG(
     'spark_pi',
-    default_args=default_args,
+    default_args={
+        'owner': 'airflow',
+        'depends_on_past': False,
+        'email': ['airflow@example.com'],
+        'email_on_failure': False,
+        'email_on_retry': False,
+        'max_active_runs': 1,
+    },
     description='submit spark-pi as sparkApplication on kubernetes',
     schedule_interval=timedelta(days=1),
     start_date=days_ago(1),
+    catchup=False,
 )
 
 t1 = SparkKubernetesOperator(
     task_id='spark_pi_submit',
-    namespace="spark-job",
-    application_file="spark-pi.yml",
+    namespace="airflow",
+    application_file="spark-batch-operator.yaml",
     kubernetes_conn_id="kubernetes_default",
     do_xcom_push=True,
     dag=dag,
@@ -41,7 +36,7 @@ t1 = SparkKubernetesOperator(
 
 t2 = SparkKubernetesSensor(
     task_id='spark_pi_monitor',
-    namespace="spark-job",
+    namespace="airflow",
     application_name="{{ task_instance.xcom_pull(task_ids='spark_pi_submit')['metadata']['name'] }}",
     kubernetes_conn_id="kubernetes_default",
     dag=dag,
