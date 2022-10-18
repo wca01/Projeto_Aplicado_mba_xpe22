@@ -3,11 +3,11 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
- name: 
- region: 
- version: "1.18"
+ name: proj-spark-airflow
+ region: us-east-2
+ version: "1.22"
 
-availabilityZones: ["a", "b", "c"]
+availabilityZones: ["us-east-2a", "us-east-2b", "us-east-2c"]
 
 managedNodeGroups:
 - name: ng-on-demand

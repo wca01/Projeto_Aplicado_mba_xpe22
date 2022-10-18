@@ -18,7 +18,7 @@ spec:
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: "docker.io/wcalmeida/spark-aws:v2" # "docker.io/neylsoncrepalde/spark-operator:v3.0.0-aws" 
+  image: "allenhaozi/base-pyspark-3.2.1-py-v3.8:v0.1.0"  # "docker.io/wcalmeida/spark-aws:v2" # "docker.io/neylsoncrepalde/spark-operator:v3.0.0-aws" 
   imagePullPolicy: Always
   mainApplicationFile: s3a://projeto-aplicado-xpe22/pyspark/olist_converte_parquet.py
   sparkVersion: 3.0.0"

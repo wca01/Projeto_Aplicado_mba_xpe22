@@ -32,7 +32,7 @@ iam:
   serviceAccounts:
     - metadata:
         name: cluster-autoscaler
-        namespace: kube-system
+        namespace: airflow #kube-system
         labels: {aws-usage: "cluster-ops"}
       attachPolicy: # inline policy can be defined along with `attachPolicyARNs`
         Version: "2012-10-17"
