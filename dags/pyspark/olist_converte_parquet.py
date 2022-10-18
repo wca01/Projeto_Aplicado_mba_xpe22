@@ -25,46 +25,46 @@ if __name__ == "__main__":
 
     spark.sparkContext.setLogLevel("WARN")
     
-    olist_path = "s3a://mba-xpe22-landing-zone/olist/"
-    parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet/"
+    
+    parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet"
 
     df_customers = spark.read.format("csv").options(header=True, inferSchema=True, delimiter=';') \
-    .load(f"{olist_path}/olist_customers_dataset.csv")
+    .load("s3a://mba-xpe22-landing-zone/olist/olist_customers_dataset.csv")
     df_customers.printSchema()
 
     df_orders = spark.read.format("csv") \
                 .options(header=True, inferSchema=True, timestampFormat="y-M-d H:m:s") \
-                .load(f"{olist_path}/olist_orders_dataset.csv")
+                .load("s3a://mba-xpe22-landing-zone/olist/olist_orders_dataset.csv")
     df_orders.printSchema()
 
     df_order_items = spark.read.format("csv") \
                       .options(header=True, inferSchema=True, timestampFormat="y-M-d H:m:s") \
-                      .load(f"{olist_path}/olist_order_items_dataset.csv")
+                      .load("s3a://mba-xpe22-landing-zone/olist/olist_order_items_dataset.csv")
     df_order_items.printSchema()
 
     df_payments = spark.read.format("csv") \
                    .options(header=True, inferSchema=True) \
-                   .load(f"{olist_path}/olist_order_payments_dataset.csv")
+                   .load("s3a://mba-xpe22-landing-zone/olist/olist_order_payments_dataset.csv")
     df_payments.printSchema()
 
     df_products = spark.read.format("csv") \
                    .options(header=True, inferSchema=True) \
-                   .load(f"{olist_path}/olist_products_dataset.csv")
+                   .load("s3a://mba-xpe22-landing-zone/olist/olist_products_dataset.csv")
     df_products.printSchema()
 
     df_sellers = spark.read.format("csv") \
                   .options(header=True, inferSchema=True) \
-                  .load(f"{olist_path}/olist_sellers_dataset.csv")
+                  .load("s3a://mba-xpe22-landing-zone/olist/olist_sellers_dataset.csv")
     df_sellers.printSchema()
 
     df_product_category = spark.read.format("csv") \
                            .options(header=True, inferSchema=True) \
-                           .load(f"{olist_path}/product_category_name_translation.csv")
+                           .load("s3a://mba-xpe22-landing-zone/olist/product_category_name_translation.csv")
     df_product_category.printSchema()
     
     df_orders_reviews = spark.read.format("csv") \
                    .options(header=True, inferSchema=True) \
-                   .load(f"{olist_path}/olist_order_reviews_dataset.csv")
+                   .load("s3a://mba-xpe22-landing-zone/olist/olist_order_reviews_dataset.csv")
     df_orders_reviews.printSchema()
 
     df_customers.write.parquet(parquet_path + "/customers.parquet")
