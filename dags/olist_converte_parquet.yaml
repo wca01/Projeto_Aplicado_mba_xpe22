@@ -2,7 +2,7 @@ apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
   name: job-pyspark-conv-pq-{{ macros.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") }}
-  namespace: airflow
+  namespace: default # airflow
 spec:
   volumes:
     - name: ivy
