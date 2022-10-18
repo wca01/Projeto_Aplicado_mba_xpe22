@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: airflow-worker
-  namespace: airflow
+  name: spark-operator
+  namespace: spark
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: airflow
+  namespace: spark
   name: airflow-role
 rules:
 - apiGroups: [""]
@@ -24,11 +24,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: airflow-role-binding
-  namespace: airflow
+  namespace: spark
 subjects:
 - kind: ServiceAccount
-  name: spark-sa
-  namespace: airflow
+  name: spark-operator
+  namespace: spark
 roleRef:
   kind: Role
   name: spark-role
