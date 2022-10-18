@@ -25,7 +25,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: airflow-worker
-    namespace: spark # airflow
+    namespace: airflow
 
 # # edit of pedrohff.com.br
 # apiVersion: rbac.authorization.k8s.io/v1
