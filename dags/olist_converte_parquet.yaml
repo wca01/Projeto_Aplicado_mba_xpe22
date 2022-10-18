@@ -37,7 +37,7 @@ spec:
     memory: "8g"
     labels:
       version: 3.0.0
-    serviceAccount: spark-operator
+    serviceAccount: airflow-worker
     volumeMounts:
       - name: ivy
         mountPath: /tmp
