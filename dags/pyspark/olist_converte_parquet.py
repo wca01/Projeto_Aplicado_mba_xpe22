@@ -28,7 +28,7 @@ if __name__ == "__main__":
     
     parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet"
 
-    df_customers = spark.read.format("csv").options(header=True, inferSchema=True, delimiter=';') \
+    df_customers = spark.read.format("csv").options(header=True, inferSchema=True) \
     .load("s3a://mba-xpe22-landing-zone/olist/olist_customers_dataset.csv")
     df_customers.printSchema()
 
