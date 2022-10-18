@@ -1,9 +1,9 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: proj-mbaxpe22-k8s
+  name: k8s-airflow-spark-1810
   region: us-east-2
-  version: "1.23"
+  version: "1.20"
 iam:
   withOIDC: true
   serviceAccounts:
@@ -33,7 +33,7 @@ managedNodeGroups:
     maxSize: 6
     desiredCapacity: 2
     volumeSize: 20
-    availabilityZones: ["us-east-2a"]
+    availabilityZones: ["us-east-2a","us-east-2b"]
     labels:
       lifecycle: Ec2Spot
       intent: control
