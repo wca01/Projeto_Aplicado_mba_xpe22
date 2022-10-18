@@ -8,7 +8,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: airflow
-  name: airflows-role
+  name: airflow-role
 rules:
 - apiGroups: [""]
   resources: ["pods"]
@@ -23,12 +23,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: spark-role-binding
+  name: airflow-role-binding
   namespace: airflow
 subjects:
 - kind: ServiceAccount
-  name: spark
-  namespace: default
+  name: spark-sa
+  namespace: airflow
 roleRef:
   kind: Role
   name: spark-role

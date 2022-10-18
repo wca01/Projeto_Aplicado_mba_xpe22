@@ -1,0 +1,158 @@
+
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: spark-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+  - kind: ServiceAccount
+    name: spark
+    namespace: spark
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: spark-eks
+  namespace: spark
+data:
+  driver: |-
+    apiVersion: v1
+    kind: Pod
+    spec:
+      nodeSelector:
+        node-lifecycle: on-demand
+        disk: none
+      initContainers:
+      - name: volume-permissions
+        image: public.ecr.aws/y4g4v0z7/busybox
+        command: ['sh', '-c', 'mkdir /tmp/spark && chown -R 185 /tmp/spark']
+
+  executor: |-
+    apiVersion: v1
+    kind: Pod
+    spec:
+      tolerations:
+      - key: spot
+        operator: Equal
+        value: true
+        effect: NoSchedule
+      nodeSelector:
+        node-lifecycle: spot
+        disk: nvme
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: spark/app
+                operator: In
+                values:
+                - spark-eks
+            topologyKey: topology.kubernetes.io/zone
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: spark/app
+                operator: NotIn
+                values:
+                - spark-eks
+              - key: spark/component
+                operator: In
+                values:
+                - executor
+            topologyKey: kubernetes.io/hostname
+      initContainers:
+      - name: volume-permissions
+        image: public.ecr.aws/y4g4v0z7/busybox
+        command: ['sh', '-c', 'chown -R 185 /tmp/spark']
+        volumeMounts:
+        - mountPath: /tmp/spark
+          name: spark-local-dir-1
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-eks
+  namespace: spark
+spec:
+  template:
+    spec:
+      containers:
+        - name: spark
+          image: docker.io/wcalmeida/spark-aws:v1
+          args: [
+              "/bin/sh",
+              "-c",
+              "/opt/spark/bin/spark-submit \
+            --master k8s://https://kubernetes.default.svc.cluster.local:443 \
+            --deploy-mode cluster \
+            --name spark-eks \
+            --class ValueZones \
+            --conf spark.jars.ivy=/tmp/.ivy \
+            --conf spark.dynamicAllocation.enabled=true \
+            --conf spark.dynamicAllocation.shuffleTracking.enabled=true \
+            --conf spark.dynamicAllocation.shuffleTracking.timeout=600 \
+            --conf spark.dynamicAllocation.minExecutors=4 \
+            --conf spark.dynamicAllocation.maxExecutors=12 \
+            --conf spark.kubernetes.allocation.batch.size=10 \
+            --conf spark.dynamicAllocation.executorAllocationRatio=1 \
+            --conf spark.dynamicAllocation.schedulerBacklogTimeout=1 \
+            --conf spark.driver.memory=4G \
+            --conf spark.executor.memory=27G \
+            --conf spark.executor.cores=3 \
+            --conf spark.sql.shuffle.partitions=40 \
+            --conf spark.kubernetes.container.image=<REPO>>/spark-eks:v3.1.2 \
+            --conf spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
+            --conf spark.kubernetes.container.image.pullPolicy=Always \
+            --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
+            --conf spark.kubernetes.namespace=spark \
+            --conf spark.kubernetes.driver.label.spark/app=spark-eks \
+            --conf spark.kubernetes.executor.label.spark/app=spark-eks \
+            --conf spark.kubernetes.driver.label.spark/component=driver \
+            --conf spark.kubernetes.executor.label.spark/component=executor \
+            --conf spark.kubernetes.node.selector.noderole=spark \
+            --conf spark.kubernetes.node.selector.kubernetes.io/os=linux \
+            --conf spark.kubernetes.node.selector.arch=x86 \
+            --conf spark.kubernetes.driver.annotation.cluster-autoscaler.kubernetes.io/safe-to-evict=false \
+            --conf spark.kubernetes.driver.podTemplateFile='/opt/spark/conf/driver_pod_template.yml' \
+            --conf spark.kubernetes.executor.podTemplateFile='/opt/spark/conf/executor_pod_template.yml' \
+            --conf spark.kubernetes.executor.volumes.hostPath.spark-local-dir-1.mount.path='/tmp/spark' \
+            --conf spark.kubernetes.executor.volumes.hostPath.spark-local-dir-1.options.path='/pv-disks/local' \
+            --conf spark.local.dir='/tmp/spark' \
+            --conf spark.hadoop.mapreduce.outputcommitter.factory.scheme.s3a=org.apache.hadoop.fs.s3a.commit.S3ACommitterFactory \
+            --conf spark.sql.sources.commitProtocolClass=org.apache.spark.internal.io.cloud.PathOutputCommitProtocol \
+            --conf spark.sql.parquet.output.committer.class=org.apache.hadoop.mapreduce.lib.output.BindingPathOutputCommitter \
+            --conf spark.hadoop.fs.s3a.committer.name=magic \
+            --conf spark.hadoop.fs.s3a.committer.magic.enabled=true \
+            --conf spark.hadoop.fs.s3a.fast.upload=true \
+            --conf spark.hadoop.fs.s3a.aws.credentials.provider=com.amazonaws.auth.WebIdentityTokenCredentialsProvider \
+            --conf spark.kubernetes.authenticate.submission.caCertFile=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+            --conf spark.kubernetes.authenticate.submission.oauthTokenFile=/var/run/secrets/kubernetes.io/serviceaccount/token \
+            local:///opt/spark/jars/spark-eks-assembly-3.1.2.jar \
+            \"s3a://projeto-aplicado-xpe22" \
+            \"2017\" \
+            \"s3a://nyc-tlc/misc/taxi _zone_lookup.csv\" \
+            \"s3a://projeto-aplicado-xpe22/nyctaxi\"
+            \"spark_eks\""
+          ]
+          volumeMounts:
+            - name: spark-pod-template
+              mountPath: /opt/spark/conf/driver_pod_template.yml
+              subPath: driver
+            - name: spark-pod-template
+              mountPath: /opt/spark/conf/executor_pod_template.yml
+              subPath: executor
+      serviceAccountName: spark
+      restartPolicy: Never
+      volumes:
+        - name: spark-pod-template
+          configMap:
+            name: spark-eks
+            defaultMode: 420
+  backoffLimit: 4

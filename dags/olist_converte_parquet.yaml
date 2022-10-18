@@ -2,7 +2,7 @@ apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
   name: job-pyspark-conv-pq-{{ macros.datetime.now().strftime("%Y-%m-%d-%H-%M-%S") }}
-  namespace: airflow
+  namespace: spark
 spec:
   volumes:
     - name: ivy
@@ -37,7 +37,7 @@ spec:
     memory: "8g"
     labels:
       version: 3.0.0
-    serviceAccount: airflow-worker
+    serviceAccount: spark-operator
     volumeMounts:
       - name: ivy
         mountPath: /tmp
