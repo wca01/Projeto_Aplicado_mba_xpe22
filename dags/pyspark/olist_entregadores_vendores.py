@@ -1,7 +1,8 @@
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
-from variables import parquet_path, delivery_zone
-import pandas as pd
+
+parquet_path = "s3://mba-xpe22-processing-zone/olist_parquet"
+delivery_zone = "s3://mba-xpe22-delivery-zone/olist_data"
 
 # set conf
 conf = (
