@@ -1,9 +1,5 @@
 *.csv
-.terraform*
 generate_fernet_key.py
 Image_aws
 Iac/eks*
-airflow/cr_default.yaml
-minikube-linux-amd64
-IaC/eks/arquived_eks/eksctl.yaml
-airflow/cr_default.yaml
+dags/pyspark
