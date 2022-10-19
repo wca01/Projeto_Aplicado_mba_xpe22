@@ -29,7 +29,7 @@ if __name__ == "__main__":
         spark
         .read
         .format("parquet")
-        .load("s3://mba-xpe22-processing-zone/olist_parquet/customers.parquet")
+        .load("s3a://mba-xpe22-processing-zone/olist_parquet/customers.parquet")
     )
 df_customers.na.drop(subset=['customer_unique_id'])
 
@@ -37,13 +37,13 @@ df_orders = (
         spark
         .read
         .format("parquet")
-        .load("s3://mba-xpe22-processing-zone/olist_parquet/orders.parquet")
+        .load("s3a://mba-xpe22-processing-zone/olist_parquet/orders.parquet")
     )
 df_orders = df_orders.withColumn('order_purchase_timestamp', F.to_timestamp('order_purchase_timestamp')).withColumn('order_delivered_carrier_data', F.to_timestamp('order_delivered_carrier_date')).withColumn('order_approved_at',F.to_timestamp('order_approved_at')).withColumn('order_delivered_customer_date',F.to_timestamp('order_delivered_customer_date')).withColumn('order_estimed_delivery_date',F.to_timestamp('order_estimated_delivery_date'))
 
-df_customers.write.mode('append').parquet("s3://mba-xpe22-processing-zone/olist_parquet/customers.parquet")
+df_customers.write.mode('append').parquet("s3a://mba-xpe22-processing-zone/olist_parquet/customers.parquet")
 
-df_orders.write.mode('append').parquet("s3://mba-xpe22-processing-zone/olist_parquet/orders.parquet")
+df_orders.write.mode('append').parquet("s3a://mba-xpe22-processing-zone/olist_parquet/orders.parquet")
 
 print("*********************")
 print("Escrito com sucesso!")
