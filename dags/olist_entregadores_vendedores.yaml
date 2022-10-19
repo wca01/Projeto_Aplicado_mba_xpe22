@@ -19,7 +19,7 @@ spec:
   mode: cluster
   image: "docker.io/wcalmeida/spark-aws:v1" 
   imagePullPolicy: Always
-  mainApplicationFile: s3a://projeto-aplicado-xpe22/pyspark/olist_entregadores_vendedores.py
+  mainApplicationFile: s3a://projeto-aplicado-xpe22/pyspark/olist_entrega_venda.py
   sparkVersion: "3.0.0"
   restartPolicy:
     type: Never
