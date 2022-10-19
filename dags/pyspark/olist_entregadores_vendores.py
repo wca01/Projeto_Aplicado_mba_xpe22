@@ -2,7 +2,6 @@ from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 
 parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet"
-delivery_zone = "s3a://mba-xpe22-delivery-zone/olist_data"
 
 # set conf
 conf = (
@@ -30,7 +29,7 @@ if __name__ == "__main__":
     merged = spark.read.parquet(parquet_path + "/merged.parquet")
     df_cons_sells = merged.select('order_id','customer_id', 'customer_city',
  'customer_state','seller_id','seller_city','seller_state')
-    df_cons_sells.toPandas().to_csv(delivery_zone+'/df_cons_sells.csv')
+    df_cons_sells.toPandas().to_csv("s3://mba-xpe22-delivery-zone/olist-db/df_cons_sells.csv")
 
     print("*********************")
     print("Escrito com sucesso!")

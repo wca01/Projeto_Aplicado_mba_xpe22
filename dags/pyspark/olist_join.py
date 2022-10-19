@@ -2,7 +2,6 @@ from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 
 parquet_path = "s3a://mba-xpe22-processing-zone/olist_parquet"
-delivery_zone = "s3a://mba-xpe22-delivery-zone/"
 # set conf
 conf = (
 SparkConf()
@@ -42,7 +41,7 @@ if __name__ == "__main__":
     df_merged = df_merged.join(sellers, on=["seller_id"], how="inner")
     df_merged = df_merged.join(products_cat, on=["product_category_name"], how="inner")
 
-    df_merged.write.parquet(delivery_zone + "olist_join")
+    df_merged.write.mode("overwrite").format("parquet").save("s3://mba-xpe22-delivery-zone/olist_data")
 
     print("*********************")
     print("Escrito com sucesso!")
