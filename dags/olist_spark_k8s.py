@@ -19,7 +19,7 @@ def trigger_crawler_join():
         glue.start_crawler(Name='data_olist')
 
 with DAG(
-    'olist_batch_spark_k8s',
+    'batch_spark_k8s',
     default_args={
         'owner': 'WCdeAlmeida',
         'depends_on_past': False,
