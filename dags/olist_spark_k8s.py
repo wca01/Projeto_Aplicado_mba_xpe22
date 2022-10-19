@@ -28,7 +28,7 @@ with DAG(
         'max_active_runs': 1,
     },
     description='submit spark jobs as sparkApplication on kubernetes',
-    schedule_interval="0 */2 * * *",
+    schedule_interval="0 */6 * * *",
     start_date=days_ago(1),
     catchup=False,
     tags=['spark', 'kubernetes', 'batch', 'olist'],
