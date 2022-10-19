@@ -33,50 +33,50 @@ with DAG(
     catchup=False,
     tags=['spark', 'kubernetes', 'batch', 'olist'],
 ) as dag:
-    converte_parquet = SparkKubernetesOperator(
-        task_id='converte_parquet',
-        namespace="airflow",
-        application_file="olist_converte_parquet.yaml",
-        kubernetes_conn_id="kubernetes_default",
-        do_xcom_push=True,
-    )
+    # converte_parquet = SparkKubernetesOperator(
+    #     task_id='converte_parquet',
+    #     namespace="airflow",
+    #     application_file="olist_converte_parquet.yaml",
+    #     kubernetes_conn_id="kubernetes_default",
+    #     do_xcom_push=True,
+    # )
 
-    converte_parquet_monitor = SparkKubernetesSensor(
-        task_id='converte_parquet_monitor',
-        namespace="airflow",
-        application_name="{{ task_instance.xcom_pull(task_ids='converte_parquet')['metadata']['name'] }}",
-        kubernetes_conn_id="kubernetes_default",
-    )
+    # converte_parquet_monitor = SparkKubernetesSensor(
+    #     task_id='converte_parquet_monitor',
+    #     namespace="airflow",
+    #     application_name="{{ task_instance.xcom_pull(task_ids='converte_parquet')['metadata']['name'] }}",
+    #     kubernetes_conn_id="kubernetes_default",
+    # )
 
-    entregadores_vendedores = SparkKubernetesOperator(
-        task_id='entregadores_vendedores',
-        namespace="airflow",
-        application_file="olist_entregadores_vendedores.yaml",
-        kubernetes_conn_id="kubernetes_default",
-        do_xcom_push=True,
-    )
+    # entregadores_vendedores = SparkKubernetesOperator(
+    #     task_id='entregadores_vendedores',
+    #     namespace="airflow",
+    #     application_file="olist_entregadores_vendedores.yaml",
+    #     kubernetes_conn_id="kubernetes_default",
+    #     do_xcom_push=True,
+    # )
 
-    entregadores_vendedores_monitor = SparkKubernetesSensor(
-        task_id='entregadores_vendedores_monitor',
-        namespace="airflow",
-        application_name="{{ task_instance.xcom_pull(task_ids='entregadores_vendedores')['metadata']['name'] }}",
-        kubernetes_conn_id="kubernetes_default",
-    )
+    # entregadores_vendedores_monitor = SparkKubernetesSensor(
+    #     task_id='entregadores_vendedores_monitor',
+    #     namespace="airflow",
+    #     application_name="{{ task_instance.xcom_pull(task_ids='entregadores_vendedores')['metadata']['name'] }}",
+    #     kubernetes_conn_id="kubernetes_default",
+    # )
 
-    olist_join = SparkKubernetesOperator(
-        task_id='olist_join',
-        namespace="airflow",
-        application_file="olist_join.yaml",
-        kubernetes_conn_id="kubernetes_default",
-        do_xcom_push=True,
-    )
+    # olist_join = SparkKubernetesOperator(
+    #     task_id='olist_join',
+    #     namespace="airflow",
+    #     application_file="olist_join.yaml",
+    #     kubernetes_conn_id="kubernetes_default",
+    #     do_xcom_push=True,
+    # )
 
-    olist_join_monitor = SparkKubernetesSensor(
-        task_id='olist_join_monitor',
-        namespace="airflow",
-        application_name="{{ task_instance.xcom_pull(task_ids='olist_join')['metadata']['name'] }}",
-        kubernetes_conn_id="kubernetes_default",
-    )
+    # olist_join_monitor = SparkKubernetesSensor(
+    #     task_id='olist_join_monitor',
+    #     namespace="airflow",
+    #     application_name="{{ task_instance.xcom_pull(task_ids='olist_join')['metadata']['name'] }}",
+    #     kubernetes_conn_id="kubernetes_default",
+    # )
 
     olist_tratamento_dados = SparkKubernetesOperator(
         task_id='olist_tratamento_dados',
@@ -94,12 +94,13 @@ with DAG(
     )
 
 
-    trigger_crawler_join = PythonOperator(
-        task_id='trigger_crawler_join',
-        python_callable=trigger_crawler_join,
-    )
+    # trigger_crawler_join = PythonOperator(
+    #     task_id='trigger_crawler_join',
+    #     python_callable=trigger_crawler_join,
+    # )
 
-converte_parquet >> converte_parquet_monitor >> olist_tratamento_dados >> olist_tratamento_dados_monitor
-olist_tratamento_dados_monitor >> olist_join >> olist_join_monitor
-olist_join_monitor >> trigger_crawler_join
-[olist_join_monitor, olist_tratamento_dados_monitor] >> entregadores_vendedores >> entregadores_vendedores_monitor
+# converte_parquet >> converte_parquet_monitor >> 
+olist_tratamento_dados >> olist_tratamento_dados_monitor
+# olist_tratamento_dados_monitor >> olist_join >> olist_join_monitor
+# olist_join_monitor >> trigger_crawler_join
+# [olist_join_monitor, olist_tratamento_dados_monitor] >> entregadores_vendedores >> entregadores_vendedores_monitor
