@@ -3,3 +3,5 @@ generate_fernet_key.py
 Image_aws
 Iac/eks*
 dags/pyspark
+values.yaml
+rbac-config.yaml
